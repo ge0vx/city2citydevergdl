@@ -1,23 +1,52 @@
-<?php	
-	if(empty($_POST['name']) && strlen($_POST['name']) == 0 || empty($_POST['email']) && strlen($_POST['email']) == 0 || empty($_POST['message']) && strlen($_POST['message']) == 0)
+<?php
+    date_default_timezone_set('America/Mexico_City');
+    require 'PHPMailer/PHPMailerAutoload.php';
+
+    if(     empty($_POST['name']) && strlen($_POST['name']) == 0 || 
+            empty($_POST['email']) && strlen($_POST['email']) == 0 || 
+            empty($_POST['message']) && strlen($_POST['message']) == 0)
 	{
 		return false;
 	}
-	
-	$name = $_POST['name'];
-	$email = $_POST['email'];
-	$message = $_POST['message'];
-	
-	$to = 'receiver@yoursite.com'; // Email submissions are sent to this email
 
-	// Create email	
-	$email_subject = "Message from a Blocs website.";
-	$email_body = "You have received a new message. \n\n".
-				  "Name: $name \nEmail: $email \nMessage: $message \n";
-	$headers = "MIME-Version: 1.0\r\nContent-type: text/plain; charset=UTF-8\r\n";	
-	$headers .= "From: contact@yoursite.com\n";
-	$headers .= "Reply-To: $email";	
-	
-	mail($to,$email_subject,$email_body,$headers); // Post message
-	return true;			
+    if (is_ajax()){
+        
+        $nameCostumer = $_POST["name"];
+        $mailCostumer = $_POST["email"];
+        $dato_mensaje = $_POST["message"];
+        return domail($mailCostumer, $nameCostumer, $dato_mensaje);
+    }
+
+    //Function to check if the request is an AJAX request
+    function is_ajax() {
+      return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+    }
+    
+    function domail($mailC, $nameC, $msj){
+        $mail = new PHPMailer;
+        $mail->isSMTP();
+        
+        $mail->SMTPDebug = 2;
+        $mail->Host = 'smtp.zoho.com';
+        $mail->Port = 465;
+        $mail->SMTPSecure = 'ssl';
+        $mail->SMTPAuth = true;
+        $mail->Username = "services@ubicuotech.mx";
+        $mail->Password = "T3CHubicu0+.am";
+        
+        $mail->setFrom('services@ubicuotech.mx', 'City2City (no-reply)');
+        
+        //$mail->addAddress('geovapb@gmail.com', 'Diego Orozco');
+        $mail->addAddress('diego@ubicuotech.mx', 'Diego Orozco');
+        $mail->addAddress('eorozco@ubicuotech.com', 'Efrain Orozco');
+        
+        $mail->Subject = 'Eparki Contacto (no-reply)';
+        $mail->Body    = 'Cyty2cyty Name: '.$nameC.' <br/>E-mail: '.$mailC."<br/><br/>Message: ".$msj;
+        $mail->AltBody = $nameC.' |Correo: '.$mailC." |".$msj;
+        if (!$mail->send()) {
+            return false;
+        } else {
+            return true;	
+        }
+    }
 ?>
