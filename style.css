@@ -534,7 +534,7 @@ h1,h2,h3,h4,h5,h6,p,label,.btn,a{
 	margin-top:15px;
 }
 .blocs-mobile-signup-text{
-	width:673px;
+	width:100%;
 	font-weight:normal;
 	font-size:38px;
 }
@@ -800,6 +800,7 @@ h1,h2,h3,h4,h5,h6,p,label,.btn,a{
         padding-right: 0;
     }
 }
+
 @media (max-width: 767px){
 	.blocs-mobile-signup-text{
 	text-align:center;
@@ -807,5 +808,12 @@ h1,h2,h3,h4,h5,h6,p,label,.btn,a{
 .bloc-mob-center-text{
 	text-align:center;
 }
+    body{
+        padding: 5px;
+    }
  }
 
+
+.text-in-cup {
+    font-size: 0.7em;
+}
